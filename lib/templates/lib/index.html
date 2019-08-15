@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8" />
+        {% load static %}
+    <!-- Adding Css & Js Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/all.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/style.css' %}" />
+
+    {% comment %} <link rel="stylesheet" href="../../../statics/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/all.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/style.css" /> {% endcomment %}
+    <script type="text/javascript" src="{% static 'lib/js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/all.js' %}"></script>
+{% comment %} 
+    <script src="../../../statics/lib/js/bootstrap.min.js"></script>
+    <script src="../../../statics/lib/js/all.js"></script>
+    <script src="../../../statics/lib/js/jquery-3.4.1.min.js"></script> {% endcomment %}
+    <title>کتابخانه موسسه اسراء</title>
+</head>
+
+<body>
+    <!-- Container Starts Here -->
+    <div class="container-fluid">
+        <!-- Starting Navbar -->
+        <div class="row text-center navybar">
+            <div class="col-lg-4 col-md-6 text-right ">
+                <i class="far fa-edit"></i> ثبت نام/ورود
+            </div>
+            <div class="col-lg-4 d-none d-lg-inline text-center">
+                بسم الله الرحمن الرحیم
+            </div>
+            <div class="col-lg-4 col-md-6 text-left d-none d-md-inline">
+                کتابخانه موسسه اسراء
+            </div>
+        </div>
+        <!-- End Of navbar -->
+
+        <!-- Starting Banner Area -->
+        <div class="row banner">
+            <!-- Starting Searchbar Area -->
+            <div class="col-lg-12 text-center searchare">
+                <input class="search-bar" type="text" placeholder="جست و جوی سریع کتاب  در تمام منابع ..." />
+                <i class="fal fa-search" style="color: #565656 ; margin-right:-35px;position:relative ; font-size:19px ; top:4px"></i>
+                <br />
+                <button class="searchmore">
+            جست و جوی دقیق
+            <i
+              class="fas fa-arrow-left"
+              style="position:relative ; top:3px ; right:2px"
+            ></i>
+          </button>
+            </div>
+            <!-- Ending Searchbar Area -->
+        </div>
+        <!-- Ending Banner Area -->
+        <!-- Menu Area Start Here -->
+        <div class="row text-center">
+            <div class="col-lg-4">
+                <div class="menu menu-green">
+                    <div class="menu-header">
+                        دسته بندی ها
+                    </div>
+                    <hr style="border-color:white">
+                    <div class="menu-body text-right">
+                        <ul>
+                        {% for cat in cats %}
+                            <a href='{{ cat.get_absolute_url }}'><li>{{ cat.name }}</li></a>
+                        {% endfor %}
+                            {% comment %} <a href='asd.com'><li>فقهی</li></a>
+                            <li>علمی</li>
+                            <li>ادبیات</li>
+                            <li>آموزشی</li>
+                            <li>ورزشی</li>
+                            <li>فقهی</li>
+                            <li>آموزشی</li>
+                            <li>ورزشی</li>
+                            <li>فقهی</li> {% endcomment %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="menu menu-blue">
+                    <div class="menu-header">
+                        لینک های مفید
+                    </div>
+                    <hr style="border-color:white">
+                    <div class="menu-body text-right">
+                        <ul>
+                            <li>صفحه اصلی</li>
+                            <li>سایت اسراء</li>
+                            <li>جست و جو پیشرفته</li>
+                            <li>پشتیبانی</li>
+                            <li>تماس با ما</li>
+                            <li>درباره ما</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="menu menu-red">
+                    <div class="menu-header">
+                        آمار
+                    </div>
+                    <hr style="border-color:white">
+                    <div class="menu-body text-right">
+                        <ul class="nodot">
+                            <li>کتب فارسی : 12345</li>
+                            <li>کتب انگلیسی : 12345</li>
+                            <li>کتب عربی : 12345</li>
+                            <li>کتب فقهی : 12345</li>
+                            <li>کتب فرانسوی : 12345</li>
+                            <li>کتب آلمانی : 12345</li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Menu Section Ends Here -->
+        <!-- Footer Section Starts Here -->
+        <div class="row footer text-center">
+            <div class="col-lg-12">
+                کلیه حقوق متعلق به موسسه اسرا می باشد . هرگونه کپی برداری پیگرد قانونی دارد ©
+            </div>
+        </div>
+        <!-- Footer Section Ends Here -->
+    </div>
+    <!-- Container Ends here -->
+</body>
+
+</html>

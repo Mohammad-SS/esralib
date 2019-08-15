@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8" />
+    {% load static %}
+    <!-- Adding Css & Js Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/all.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/style.css' %}" />
+
+    {% comment %} <link rel="stylesheet" href="../../../statics/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/all.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/style.css" /> {% endcomment %}
+    <script type="text/javascript" src="{% static 'lib/js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/all.js' %}"></script>
+{% comment %} 
+    <script src="../../../statics/lib/js/bootstrap.min.js"></script>
+    <script src="../../../statics/lib/js/all.js"></script>
+    <script src="../../../statics/lib/js/jquery-3.4.1.min.js"></script> {% endcomment %}
+    <title>دسته بندی</title>
+</head>
+
+<body>
+    <!-- Container Starts Here -->
+    <div class="container-fluid">
+        <!-- Starting Navbar -->
+        <div class="row text-center navybar">
+            <div class="col-lg-4 col-md-6 text-right ">
+                <i class="far fa-edit"></i> ثبت نام/ورود
+            </div>
+            <div class="col-lg-4 d-none d-lg-inline text-center">
+                بسم الله الرحمن الرحیم
+            </div>
+            <div class="col-lg-4 col-md-6 text-left d-none d-md-inline">
+                کتابخانه موسسه اسراء
+            </div>
+        </div>
+        <!-- End Of navbar -->
+        <div class="row" style="top:105px ; position:relative">
+            <div class="col-lg-12 text-right" style="padding-right:40px">
+                <i class="fal fa-book-open"></i> مشاهده دسته : {{ cat.name }}
+            </div>
+            <div class="col-lg-12 categorymain">
+                <div class="col-lg-12 text-left" style="color:white">
+                    تعداد موارد یافت شده : {{paginator.count }}
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-right catstable">
+                        <thead>
+                            <th>
+                                ردیف
+                            </th>
+                            <th>
+                                عنوان
+                            </th>
+                            <th>
+                                پدیدآورندگان
+                            </th>
+                            <th>
+                                ناشر
+                            </th>
+                            <th>
+                                سال نشر
+                            </th>
+                            <th>
+                                موضوعات
+                            </th>
+                            <th>
+                                شماره راهنما
+                            </th>
+                        </thead>
+                        <tbody>
+                        {% for book in books %}
+                        <a href="{% url 'books' pk=book.pk %}">
+                        <tr>
+                                <td>
+                                    <a href="{% url 'books' pk=book.pk %}">
+                                    {{book.pk}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'books' pk=book.pk %}">
+                                    {{book.name}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{book.author}}
+                                </td>
+                                <td>
+                                    {{book.publisher}}
+                                </td>
+                                <td>
+                                    {{book.publishdate}}
+                                </td>
+                                <td>
+                                    {{book.category}}
+                                </td>
+                                <td>
+                                    {{book.info}}
+                                </td>
+                                    </a>
+                            </tr>
+                            </a>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if books.has_other_pages %}
+                
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <ul class="pagination" style="display:inline-flex">
+                            <a href="{% url 'category' pk=cat.pk %}?page=1">
+                            <li>ابتدا</li>
+                            </a>
+                            {% if books.has_previous %}
+                            <a href="{% url 'category' pk=cat.pk %}?page={{books.previous_page_number}}">
+                            <li>{{books.previous_page_number}}</li>
+                            </a>
+                            {% endif %}
+                            <li class='active'>{{currentpage}}</li>
+                            {% if books.has_next %}
+                            <a href="{% url 'category' pk=cat.pk %}?page={{books.next_page_number}}">
+                            <li>{{books.next_page_number}}</li>
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'category' pk=cat.pk %}?page={{paginator.num_pages}}">
+                            <li>انتها</li>
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Container Ends here -->
+</body>
+
+</html>

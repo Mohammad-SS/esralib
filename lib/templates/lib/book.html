@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    {% load jalali_tags %}
+    <meta charset="UTF-8" />
+    <!-- Adding Css & Js Files -->
+    <meta charset="UTF-8" /> {% load static %}
+    <!-- Adding Css & Js Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/all.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/style.css' %}" /> {% comment %}
+    <link rel="stylesheet" href="../../../statics/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/all.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/style.css" /> {% endcomment %}
+    <script type="text/javascript" src="{% static 'lib/js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/all.js' %}"></script>
+    {% comment %}
+    <script src="../../../statics/lib/js/bootstrap.min.js"></script>
+    <script src="../../../statics/lib/js/all.js"></script>
+    <script src="../../../statics/lib/js/jquery-3.4.1.min.js"></script> {% endcomment %}
+    <title>{{book.name}}</title>
+</head>
+
+<body>
+    <!-- Container Starts Here -->
+    <div class="container-fluid bookpage">
+        <!-- Starting Navbar -->
+        <div class="row text-center navybar">
+            <div class="col-lg-4 col-md-6 text-right ">
+                <i class="far fa-edit"></i> ثبت نام/ورود
+            </div>
+            <div class="col-lg-4 d-none d-lg-inline text-center">
+                بسم الله الرحمن الرحیم
+            </div>
+            <div class="col-lg-4 col-md-6 text-left d-none d-md-inline">
+                کتابخانه موسسه اسراء
+            </div>
+        </div>
+        <!-- End Of navbar -->
+
+        <div class="row bookdetails">
+            <div class="col-lg-8 text-center">
+                <h1 class="booktitle">
+                    {{book.name}}
+                </h1>
+                <br> {% if book.desc %}
+
+                <h2 class="bookdesc">
+                    {{book.desc}}
+                </h2>
+                {% endif %}
+
+                <div class="table-responsive"></div>
+                <table class="table table-borderless text-right">
+                    <tr style="border-bottom: 0.5px dotted black">
+                        <td>
+                            شماره مدرک :
+                        </td>
+                        <td>
+                            {{book.documentNumber}}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            شماره شناسایی :
+                        </td>
+                        <td>
+                            {{book.idNumber}}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            پدیدآور :
+                        </td>
+                        <td>
+                            {{book.author}}
+                        </td>
+                    </tr>
+                    {% if book.version %}
+                    <tr style="border-bottom: 1px dotted black">
+
+                        <td>
+                            ویراست :
+                        </td>
+                        <td>
+                            {{book.version}}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            ناشر :
+                        </td>
+                        <td>
+                            {{book.publisher}}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            نوبت چاپ :
+                        </td>
+                        <td>
+                            {{book.publishdate}}
+                        </td>
+                    </tr>
+                    {% if book.lang %}
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            زبان اثر :
+                        </td>
+                        <td>
+                            {{book.lang}}
+                        </td>
+                    </tr>
+                    {% endif %} {% if book.info %}
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            يادداشتهاي کلي :
+                        </td>
+                        <td>
+                            {{book.info}}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            موضوع :
+                        </td>
+                        <td>
+                            {{book.category}}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            وضعیت فعلی :
+                        </td>
+                        <td>
+                            {% if book.status == 'available' %} موجود {% endif %} {% if book.status == 'out' %} خارج از دسترس {% endif %} {% if book.status == 'reserved' %} رزرو شده {% endif %}
+
+
+                        </td>
+                    </tr>
+                    {% if book.status != "available" %}
+                    <tr style="border-bottom: 1px dotted black">
+                        <td>
+                            تاریخ بازگشت :
+                        </td>
+                        <td>
+                            {{book.backDate|to_jalali:'روز : %y/%m/%d - ساعت : %H:%M' }}
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if not book.image %}
+                <img src="{% static 'lib/imgs/no-image.jpg' %}" class="bookimg"> {% else %}
+                <img src="{{book.image_url}}" class="bookimg"> {% endif %}
+                <br> {% if book.status == "available" %}
+                <button class="text-center bookbtn" id='reserveButton'>
+                درخواست رزرو
+                </button> {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <!-- Container Ends here -->
+    <script>
+        $(document).ready(function() {
+            $("#reserveButton").on("click", function() {
+                $.ajax({
+                    url: "{% url 'reserve_action' %}",
+                    method: "POST",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        book: "{{book.pk}}",
+                        // user : Authentication of a user will be placed here
+                    },
+
+                    success(response) {
+                        if (response == 'reserved') {
+                            alert("کتاب مورد نظر رزرو شد .")
+                            location.reload()
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
