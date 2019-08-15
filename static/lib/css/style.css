@@ -54,6 +54,11 @@ td {
     color: white;
 }
 
+.navybar a:hover {
+    text-decoration: none;
+    color: #B45A5A
+}
+
 
 /* End of Navbar Style */
 
