@@ -26,6 +26,10 @@ def category(request , pk):
     else:
         current_page = 1
     books = paginator.page(current_page)
+    findex = books.start_index()
+    for book in books:
+        book.index = findex
+        findex = findex + 1 
     context = {'cat' : category , 'paginator' : paginator , 'books' : books , 'currentpage' : current_page}
     return render(request,"lib/cats.html" , context)
 
