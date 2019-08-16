@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^cats/(?P<pk>[0-9]+)/$' , views.category ,name='category'),
     url(r'^resource/(?P<pk>[0-9]+)/$' , views.books ,name='books'),
     url(r'^action/reserve/$' , views.reserveaction ,name='reserve_action'),
+    url(r'^login$' , views.login ,name='login'),
 ] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
