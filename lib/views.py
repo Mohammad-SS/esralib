@@ -76,3 +76,13 @@ def reserveaction(request):
 # 4- and i dont know which is better for now ? ajax call or form requests . i should think a lot ! 
 def login(request):
     pass
+
+# this view will insert dummy books to database , so we can debug better !
+def dummybooks(request):
+    a = 0
+    category = models.Category.objects.get(pk=4)
+    while a<30:
+        book = models.Book(name='کتاب های دسته چهارم' , category=category , documentNumber='123456' , idNumber='54321' , author='سید محمد باقر عظیمی' , publisher='نشر اسراء' , publishdate='پارسال' , info='شماره کتاب :' + str((a+1)*163) )
+        book.save()
+        a = a+1
+    return HttpResponse(a)
