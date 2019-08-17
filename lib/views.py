@@ -97,12 +97,9 @@ def login(request):
     else:
         user = None
     if request.method == 'GET' and 'err' in request.GET:
-        # we should is there any get request for pages ?
         if request.GET['err'] is not None and request.GET['err'] != '':
-            # if there is , current page is that 
             err = request.GET['err']
     else:
-        # if there is not , we are absoloutly in first page !
         err = ''
     context = { 'err' : err , 'user' : user}
     return render(request,"lib/login.html" , context)
@@ -114,12 +111,13 @@ def logout(request):
 
 # view to do login . this page just log you in to website using data that you send from login view
 # errors : 
+# 0 = there is no erros , cool !
 # 1 = User not found
 # 2 = Username is not found
 # 3 = Password is not correct
 def dologin(request):
+    err = 0
     # checking is this request sent by POST Method ?
-    err = 1
     if request.method == 'POST' and 'username' in request.POST and 'pass' in request.POST:
         # if yes , is user name sent ?
         if request.POST['username'] is not None and request.POST['username'] != '':
