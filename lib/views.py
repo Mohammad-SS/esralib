@@ -90,12 +90,7 @@ def reserveaction(request):
     book = models.Book.objects.get(pk=bookpk)
     return HttpResponse(book.status)
 
-# this view renders login page . iam going to make this page better and better , so things i should be aware of :
-# 1- i must define a form , that sends logins data to back end ( and ofcours a view that should be named action_login ) 
-# and if this data was valid , i should do something like it : section['userpk'] = user.pk .
-# 2- i must edit all others view , and check if section['userpk'] is empty , so go to login page ! 
-# 3- i should define some more tables , user table , barrows table (i dont know is barrow good or not :D ) 
-# 4- and i dont know which is better for now ? ajax call or form requests . i should think a lot ! 
+# this view renders login page . 
 def login(request):
     if logedin(request):
         return HttpResponseRedirect(reverse('index'))
@@ -112,33 +107,51 @@ def login(request):
     context = { 'err' : err}
     return render(request,"lib/login.html" , context)
 
+# this page makes logout . i didnt link anywhere to this , so i must do it manually
 def logout(request):
     request.session.flush()
     return HttpResponse("happened")
 
+# view to do login . this page just log you in to website using data that you send from login view
+# errors : 
+# 1 = User not found
+# 2 = Username is not found
+# 3 = Password is not correct
 def dologin(request):
+    # checking is this request sent by POST Method ?
+    err = 1
     if request.method == 'POST' and 'username' in request.POST and 'pass' in request.POST:
+        # if yes , is user name sent ?
         if request.POST['username'] is not None and request.POST['username'] != '':
             username = request.POST['username']
         else:
-            return HttpResponseRedirect(reverse('login')+ "?err=2")
+            # if not , go back to login page with error 2
+            err = 2 
+        # same as username cheking
         if request.POST['pass'] is not None and request.POST['pass'] != '':
             password = request.POST['pass']
         else:
-            return HttpResponseRedirect(reverse('login')+ "?err=3")
-    err = True
-    user = models.User.objects.filter(identityNumber=username , password=password)        
-    if user.count() != 1:
-        # if user.count() != 1:
-        err = True
-    else:
-        err = False
-        user = user[0]
-    if err == False:
-        request.session['user'] = user.pk
-        return HttpResponseRedirect(reverse('login'))
-    else:
-        return HttpResponseRedirect(reverse('login')+ "?err=1")
+            err = 3
+        # if we have any error , we will break everything here
+        if err :
+            return HttpResponseRedirect(reverse('login')+ "?err=" + str(err))
+        # if we have no error , so we can check database
+        else:
+            # lets take user from database
+            user = models.User.objects.filter(identityNumber=username , password=password)        
+            # is this user exist !? how many ?!
+            if user.count() != 1:
+                err = 1
+                # if err = 1 , so user does not exist 
+                return HttpResponseRedirect(reverse('login')+ "?err=" + str(err))
+            else:
+                # we have no error , every thing is perfect !
+                err = 0
+                user = user[0]
+                request.session['user'] = user.pk
+                return HttpResponseRedirect(reverse('login'))
+
+    
 
 # this view will insert dummy books to database , so we can debug better !
 def dummybooks(request):
