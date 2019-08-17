@@ -95,7 +95,7 @@ def login(request):
     if logedin(request):
         return HttpResponseRedirect(reverse('index'))
     else:
-        HttpResponseRedirect(reverse('login'))
+        user = None
     if request.method == 'GET' and 'err' in request.GET:
         # we should is there any get request for pages ?
         if request.GET['err'] is not None and request.GET['err'] != '':
@@ -150,8 +150,6 @@ def dologin(request):
                 user = user[0]
                 request.session['user'] = user.pk
                 return HttpResponseRedirect(reverse('login'))
-
-    
 
 # this view will insert dummy books to database , so we can debug better !
 def dummybooks(request):
