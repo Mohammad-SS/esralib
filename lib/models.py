@@ -65,3 +65,11 @@ class User(models.Model):
     balance = models.IntegerField(default=0)
     def __unicode__(self):
         return self.identityNumber + "(" + self.phone + ")"
+
+class Barrow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    startDate = models.DateTimeField(default=timezone.now)
+    endDate = models.DateTimeField(default=timezone.now)
+    def __unicode__(self):
+        return self.book.name + " -> " + self.user.displayName

@@ -146,7 +146,7 @@
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         book: "{{book.pk}}",
-                        // user : Authentication of a user will be placed here
+                        user : "{{user.pk}}"
                     },
 
                     success(response) {

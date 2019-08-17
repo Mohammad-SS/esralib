@@ -73,6 +73,7 @@ def books(request , pk):
 # This view response only ajax calls from inside of this site . because we should take care of CSRF attacks for more security .
 def reserveaction(request):
     bookpk = request.POST['book']
+    userpk = request.POST['user']
     book = models.Book.objects.get(pk=bookpk)
     if book:
         # if two requests comes in one time ...
@@ -82,6 +83,10 @@ def reserveaction(request):
             book.backDate = timezone.now() + timedelta(minutes = 5)
             book.status = "reserved"
             book.save()
+
+            user = models.User.objects.get(pk=userpk)
+            barrow = models.Barrow(user=user , book=book , startDate = timezone.now() , endDate= book.backDate )
+            barrow.save()
     book = models.Book.objects.get(pk=bookpk)
     return HttpResponse(book.status)
 
