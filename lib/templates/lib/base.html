@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8" />
+        {% load static %}
+    <!-- Adding Css & Js Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/all.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/style.css' %}" />
+
+    {% comment %} <link rel="stylesheet" href="../../../statics/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/all.css" />
+    <link rel="stylesheet" href="../../../statics/lib/css/style.css" /> {% endcomment %}
+    <script type="text/javascript" src="{% static 'lib/js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/js/all.js' %}"></script>
+{% comment %} 
+    <script src="../../../statics/lib/js/bootstrap.min.js"></script>
+    <script src="../../../statics/lib/js/all.js"></script>
+    <script src="../../../statics/lib/js/jquery-3.4.1.min.js"></script> {% endcomment %}
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <!-- Container Starts Here -->
+    <div class="container-fluid">
+        <!-- Starting Navbar -->
+        <div class="row navybar">
+            <div class="col-lg-4 col-md-6 text-right ">
+            {% if user != None %}
+                <i class="far fa-edit"></i> {{user.displayName}} عزیز ، خوش آمدید
+            {% else %}
+                            <i class="far fa-edit"></i>ثبت نام/<a href="{% url 'login' %}"> ورود </a>
+
+            {% endif %}
+            </div>
+            <div class="col-lg-4 d-none d-lg-inline text-center">
+                بسم الله الرحمن الرحیم
+            </div>
+            <div class="col-lg-4 col-md-6 text-left d-none d-md-inline">
+                <a href="{% url 'index' %}">
+                کتابخانه موسسه اسراء
+                </a>
+            </div>
+        </div>
+        <!-- End Of navbar -->
+{% block content %}
+
+{% endblock content %}
+{% comment %} 
+
+ <!-- Footer Section Starts Here -->
+        <div class="row footer text-center">
+            <div class="col-lg-12">
+                کلیه حقوق متعلق به موسسه اسرا می باشد . هرگونه کپی برداری پیگرد قانونی دارد ©
+            </div>
+        </div>
+        <!-- Footer Section Ends Here --> {% endcomment %}
+    </div>
+    <!-- Container Ends here -->
+</body>
+
+</html>

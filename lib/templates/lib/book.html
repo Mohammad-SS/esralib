@@ -1,47 +1,9 @@
-<!DOCTYPE html>
-<html lang="fa">
+{% extends "lib/base.html" %}
 
-<head>
+{% block content %}
     {% load jalali_tags %}
-    <meta charset="UTF-8" />
-    <!-- Adding Css & Js Files -->
-    <meta charset="UTF-8" /> {% load static %}
-    <!-- Adding Css & Js Files -->
-    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/all.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/style.css' %}" /> {% comment %}
-    <link rel="stylesheet" href="../../../statics/lib/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../../../statics/lib/css/all.css" />
-    <link rel="stylesheet" href="../../../statics/lib/css/style.css" /> {% endcomment %}
-    <script type="text/javascript" src="{% static 'lib/js/jquery-3.4.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/js/all.js' %}"></script>
-    {% comment %}
-    <script src="../../../statics/lib/js/bootstrap.min.js"></script>
-    <script src="../../../statics/lib/js/all.js"></script>
-    <script src="../../../statics/lib/js/jquery-3.4.1.min.js"></script> {% endcomment %}
-    <title>{{book.name}}</title>
-</head>
-
-<body>
-    <!-- Container Starts Here -->
-    <div class="container-fluid bookpage">
-        <!-- Starting Navbar -->
-        <div class="row text-center navybar">
-            <div class="col-lg-4 col-md-6 text-right ">
-                <i class="far fa-edit"></i> ثبت نام/ورود
-            </div>
-            <div class="col-lg-4 d-none d-lg-inline text-center">
-                بسم الله الرحمن الرحیم
-            </div>
-            <div class="col-lg-4 col-md-6 text-left d-none d-md-inline">
-               <a href="{% url 'index' %}">
-                کتابخانه موسسه اسراء
-                </a>
-            </div>
-        </div>
-        <!-- End Of navbar -->
-
+    {% load static %}
+<div class='container-fluid bookpage'>
         <div class="row bookdetails">
             <div class="col-lg-8 text-center">
                 <h1 class="booktitle">
@@ -160,15 +122,21 @@
                 {% if not book.image %}
                 <img src="{% static 'lib/imgs/no-image.jpg' %}" class="bookimg"> {% else %}
                 <img src="{{book.image_url}}" class="bookimg"> {% endif %}
+                {% if user == None %}
+                <a href="{% url 'login' %}">
+                <button class="text-center bookbtn unavailable">
+                لطفا جهت رزرو وارد شوید
+                </button>
+                </a>
+                {% else %}
                 <br> {% if book.status == "available" %}
                 <button class="text-center bookbtn" id='reserveButton'>
                 درخواست رزرو
                 </button> {% endif %}
+                {% endif %}
+                
             </div>
         </div>
-
-    </div>
-    <!-- Container Ends here -->
     <script>
         $(document).ready(function() {
             $("#reserveButton").on("click", function() {
@@ -192,6 +160,4 @@
             });
         });
     </script>
-</body>
-
-</html>
+{% endblock %}

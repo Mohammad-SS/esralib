@@ -1,45 +1,7 @@
-<!DOCTYPE html>
-<html lang="fa">
+{% extends "lib/base.html" %}
 
-<head>
-    <meta charset="UTF-8" />
-    {% load static %}
-    <!-- Adding Css & Js Files -->
-    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/all.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'lib/css/style.css' %}" />
+{% block content %}
 
-    {% comment %} <link rel="stylesheet" href="../../../statics/lib/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../../../statics/lib/css/all.css" />
-    <link rel="stylesheet" href="../../../statics/lib/css/style.css" /> {% endcomment %}
-    <script type="text/javascript" src="{% static 'lib/js/jquery-3.4.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/js/all.js' %}"></script>
-{% comment %} 
-    <script src="../../../statics/lib/js/bootstrap.min.js"></script>
-    <script src="../../../statics/lib/js/all.js"></script>
-    <script src="../../../statics/lib/js/jquery-3.4.1.min.js"></script> {% endcomment %}
-    <title>دسته بندی</title>
-</head>
-
-<body>
-    <!-- Container Starts Here -->
-    <div class="container-fluid">
-        <!-- Starting Navbar -->
-        <div class="row text-center navybar">
-            <div class="col-lg-4 col-md-6 text-right ">
-                <i class="far fa-edit"></i> ثبت نام/ورود
-            </div>
-            <div class="col-lg-4 d-none d-lg-inline text-center">
-                بسم الله الرحمن الرحیم
-            </div>
-            <div class="col-lg-4 col-md-6 text-left d-none d-md-inline">
-                <a href="{% url 'index' %}">
-                کتابخانه موسسه اسراء
-                </a>
-            </div>
-        </div>
-        <!-- End Of navbar -->
         <div class="row" style="top:105px ; position:relative">
             <div class="col-lg-12 text-right" style="padding-right:40px">
                 <i class="fal fa-book-open"></i> مشاهده دسته : {{ cat.name }}
@@ -130,14 +92,11 @@
                             {% endif %}
                             <a href="{% url 'category' pk=cat.pk %}?page={{paginator.num_pages}}">
                             <li>انتها</li>
+                            </a>
                         </ul>
                     </div>
                 </div>
                 {% endif %}
             </div>
         </div>
-    </div>
-    <!-- Container Ends here -->
-</body>
-
-</html>
+{% endblock %}

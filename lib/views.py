@@ -11,13 +11,24 @@ from django.urls import reverse
 
 # This View renders main screen . it should be completed when links and statistics get ready
 def index(request):
+    if logedin(request):
+        user = models.User.objects.get(pk=request.session['user'])
+    else:
+        user = None
+    title = "کتابخانه موسسه اسراء"
     categorys = models.Category.objects.all()
-    context = {'cats' : categorys}
+    context = {'cats' : categorys , "title" : title , "user" : user}
     return render(request,"lib/index.html" , context)
 
 # This View renders the categorys page . 
 def category(request , pk):
+    if logedin(request):
+        user = models.User.objects.get(pk=request.session['user'])
+    else:
+        user = None
     category = models.Category.objects.get(pk=pk)
+    title = "کتابخانه موسسه اسراء"
+    title = title + " | " + category.name
     books = category.book_set.all()
     # Paginator part books in sections with 10 book .
     paginator = Paginator(books, 10)
@@ -36,10 +47,15 @@ def category(request , pk):
     for book in books:
         book.index = findex
         findex = findex + 1 
-    context = {'cat' : category , 'paginator' : paginator , 'books' : books , 'currentpage' : current_page}
+    context = {'cat' : category , 'paginator' : paginator , 'books' : books , 'currentpage' : current_page , 'title' : title , "user" : user}
     return render(request,"lib/cats.html" , context)
 
 def books(request , pk):
+    if logedin(request):
+        user = models.User.objects.get(pk=request.session['user'])
+    else:
+        user = None
+    title = "کتابخانه موسسه اسراء"
     book = models.Book.objects.get(pk=pk)
     if book.status == "reserved":
         # if book is is reserve status , we must see when this book will come back . if this time is passe , so this book is available
@@ -50,7 +66,8 @@ def books(request , pk):
             book.backDate = timezone.now()
             book.save()
             book = models.Book.objects.get(pk=pk)
-    context = {'book' : book }
+    title = title + " | " + book.name
+    context = {'book' : book , "title" : title , "user" : user}
     return render(request,"lib/book.html" , context)
 
 # This view response only ajax calls from inside of this site . because we should take care of CSRF attacks for more security .
@@ -75,8 +92,48 @@ def reserveaction(request):
 # 3- i should define some more tables , user table , barrows table (i dont know is barrow good or not :D ) 
 # 4- and i dont know which is better for now ? ajax call or form requests . i should think a lot ! 
 def login(request):
-    # request.session['username'] = "Mohammad"
-    return HttpResponse(request.session['username'])
+    if logedin(request):
+        return HttpResponseRedirect(reverse('index'))
+    else:
+        HttpResponseRedirect(reverse('login'))
+    if request.method == 'GET' and 'err' in request.GET:
+        # we should is there any get request for pages ?
+        if request.GET['err'] is not None and request.GET['err'] != '':
+            # if there is , current page is that 
+            err = request.GET['err']
+    else:
+        # if there is not , we are absoloutly in first page !
+        err = ''
+    context = { 'err' : err}
+    return render(request,"lib/login.html" , context)
+
+def logout(request):
+    request.session.flush()
+    return HttpResponse("happened")
+
+def dologin(request):
+    if request.method == 'POST' and 'username' in request.POST and 'pass' in request.POST:
+        if request.POST['username'] is not None and request.POST['username'] != '':
+            username = request.POST['username']
+        else:
+            return HttpResponseRedirect(reverse('login')+ "?err=2")
+        if request.POST['pass'] is not None and request.POST['pass'] != '':
+            password = request.POST['pass']
+        else:
+            return HttpResponseRedirect(reverse('login')+ "?err=3")
+    err = True
+    user = models.User.objects.filter(identityNumber=username , password=password)        
+    if user.count() != 1:
+        # if user.count() != 1:
+        err = True
+    else:
+        err = False
+        user = user[0]
+    if err == False:
+        request.session['user'] = user.pk
+        return HttpResponseRedirect(reverse('login'))
+    else:
+        return HttpResponseRedirect(reverse('login')+ "?err=1")
 
 # this view will insert dummy books to database , so we can debug better !
 def dummybooks(request):
@@ -86,5 +143,17 @@ def dummybooks(request):
         # book = models.Book(name='کتاب های دسته چهارم' , category=category , documentNumber='123456' , idNumber='54321' , author='سید محمد باقر عظیمی' , publisher='نشر اسراء' , publishdate='پارسال' , info='شماره کتاب :' + str((a+1)*163) )
         # book.save()
         # a = a+1
-    return HttpResponse(request.session['username'])
-    return HttpResponse(a)
+    # return HttpResponse(request.session['username'])
+    # return HttpResponse(a)
+
+# this function will check if the user is loged in or not
+# args : request (req object)
+# return : True of False (boolean)
+def logedin(request):
+    if "user" in request.session:
+        if request.session['user'] is not None and request.session['user'] != "" :
+            return True
+        else:
+            return False
+    else:
+        return False
